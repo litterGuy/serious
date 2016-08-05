@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.serious.system.dao.RoleMapper" >
+  
+  <resultMap id="RoleResultMap" type="Role">
+		<id column="id" property="id" />
+		<result column="role_name" property="role_name" />
+		<result column="description" property="description" />
+		<result column="createtime" property="createtime" />
+		<result column="updatetime" property="updatetime" />
+   </resultMap>
+  
+  <sql id="Column_List" >
+    id, role_name, description,createtime,updatetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="RoleResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Column_List" />
+    from sys_role
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_role
+    where id = #{id}
+  </delete>
+  
+  <delete id="deleteByIds" parameterType="java.lang.String">
+	DELETE FROM sys_role where id in
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+		#{idItem}
+	</foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="Role" >
+    insert into sys_role (id, role_name, description,createtime
+      )
+    values (#{id}, #{role_name}, #{description}, #{createtime}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="Role" >
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="role_name != null" >
+        role_name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="role_name != null" >
+        #{role_name},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="createtime != null" >
+        #{createtime},
+      </if>
+    </trim>
+  </insert>
+  
+    
+  <update id="updateByPrimaryKeySelective" parameterType="Role" >
+    update sys_role
+    <set >
+      <if test="role_name != null" >
+        role_name = #{role_name},
+      </if>
+      <if test="description != null" >
+        description = #{description},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+ 
+  <update id="updateByPrimaryKey" parameterType="Role" >
+    update sys_role
+    set role_name = #{role_name},
+      description = #{description},
+      updatetime = #{updatetime}
+    where id = #{id}
+  </update>
+  
+  	<select id="getAll" resultMap="RoleResultMap">
+		SELECT * FROM sys_role
+	</select>
+  
+  <select id="getAllByRole" resultMap="RoleResultMap">
+  	SELECT * FROM sys_role
+  	where 1=1
+  	 <if test="role_name != null" >
+       and role_name like CONCAT('%','${role_name}','%' ) 
+      </if>
+      <if test="description != null" >
+        and description = #{description}
+      </if>
+  </select>
+  
+   <select id="listPage" resultType="java.util.List" resultMap="RoleResultMap">
+		SELECT * FROM sys_role
+		where 1=1
+		    <if test="role_name != null" >
+		       and role_name like CONCAT('%','${role_name}','%' ) 
+		    </if>
+   </select>
+	<select id="list" resultType="java.util.List" resultMap="RoleResultMap">
+		SELECT * FROM sys_role
+	</select>
+  
+</mapper>

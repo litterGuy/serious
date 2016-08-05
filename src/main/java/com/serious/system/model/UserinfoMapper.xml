@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.serious.system.dao.UserinfoMapper">
+
+	<resultMap id="ResultMap" type="Userinfo">
+		<id column="id" property="id" />
+		<result column="user_name" property="userName" />
+		<result column="password" property="password" />
+		<result column="role_id" property="roleId" />
+		<result column="createtime" property="createtime" />
+		<result column="updatetime" property="updatetime" />
+		<result column="is_index" property="isIndex" />
+		
+        <association property="role" column="role_id"  select="getrole"/> 
+    	 	
+	</resultMap>
+	
+	<resultMap type="com.afocus.back.model.Role" id="roleMap">  
+	    <id column="id" property="id" />
+		<result column="role_name" property="role_name" />
+		<result column="description" property="description" />
+		<result column="createtime" property="createtime" />
+		<result column="updatetime" property="updatetime" />
+		<result column="is_index" property="isIndex" />
+	</resultMap>
+	
+
+	<sql id="Column_List">
+		id, user_name, password, role_id, createtime,
+		updatetime,is_index
+	</sql>
+
+	<update id="update" parameterType="Userinfo">
+		update sys_userinfo
+		<set>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+			<if test="password != null">
+				password = #{password},	
+			</if>
+			<if test="roleId != null">
+				role_id = #{roleId},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime},	
+			</if>
+			<if test="updatetime != null">
+				updatetime = #{updatetime},
+			</if>
+			<if test="isIndex != null">
+				is_index = #{isIndex}	
+			</if>
+		</set>
+			where id=#{id}
+	</update>
+	
+	<sql id="Query_Where_Clause">
+		<where>
+			<if test="id != null">
+				and <![CDATA[ id =#{id} ]]>
+			</if>
+			<if test="userName != null">
+				and user_name = '${userName}'
+			</if>
+			<if test="password != null">
+				and password = '${password}'
+			</if>
+			<if test="searchName !=null">
+				and user_name like '%${searchName}%'
+			</if>
+		</where>
+	</sql>
+
+	<select id="loadByModel" resultMap="ResultMap" parameterType="Userinfo">
+		select
+		<include refid="Column_List" />
+		from sys_userinfo
+		<include refid="Query_Where_Clause" />
+	</select>
+	
+	<select id="selectByPrimaryKey" resultMap="ResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Column_List" />
+		from sys_userinfo
+		where id = #{id}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_userinfo
+		where id = #{id}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		DELETE FROM sys_userinfo where id in
+		<foreach item="idItem" collection="array" open="(" separator=","
+			close=")">
+			#{idItem}
+		</foreach>
+	</delete>
+
+	<insert id="insert" parameterType="Userinfo">
+		insert into sys_userinfo (id, user_name,password, role_id,createtime,is_index
+		)
+		values (#{id}, #{userName}, #{password}, #{roleId}, #{createtime},0
+		)
+	</insert>
+	
+	<select id="getAll" resultMap="ResultMap">
+		SELECT * FROM sys_userinfo
+	</select>
+	
+	<select id="list" resultMap="ResultMap">
+		select
+		<include refid="Column_List" />
+		from sys_userinfo
+	</select>
+	
+	<select id="getrole" resultMap="roleMap" >  
+    	select * from app_back_role where id =#{roleId}  
+    </select>
+	
+</mapper>

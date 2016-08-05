@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"
+	>
+
+	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+	<context:component-scan base-package="com.serious" />
+	<!-- 支持spring mvc新的注解类型 详细spring3.0手册 15.12.1 mvc:annotation-driven-->
+	<mvc:annotation-driven />
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/" p:suffix=".jsp" />
+
+	<!-- 拦截器 -->
+
+
+    <!-- <mvc:interceptors>
+        <mvc:interceptor>
+	        <mvc:mapping path="/*/*.do"/>可以增加多个拦截器需拦截的地址
+	        <mvc:mapping path="/*/*/*.do"/>
+	        
+	        <bean class="com.afocus.app.utils.SecurityInterceptor">需排除拦截的地址
+	        	<property name="uncheckUrls">
+	        		<list>
+	        			<value>/app/login.do</value>
+	        			<value>/admin/login.do</value>
+	        		</list>
+	        	</property>
+	        </bean>
+	    </mvc:interceptor>  
+    </mvc:interceptors> -->
+
+</beans>
